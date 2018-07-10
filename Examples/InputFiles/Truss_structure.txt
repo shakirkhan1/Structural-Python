@@ -1,0 +1,37 @@
+Beams
+#Name  Supports1  Supports2  I  E  A  ro  numEle  Truss
+t1 a  b  0.006  7.17e10  8e-5  2768 100 1
+t2 b  c   0.006  7.17e10 8e-5  2768  100 1
+t3 c d   0.006  7.17e10 8e-5  2768 100 1
+t4 d e  0.006  7.17e10 6e-5  2768 100 1
+t5 e  f  0.006  7.17e10 8e-5  2768 100 1
+t6 f  g    0.006  7.17e10 8e-5  2768 100 1
+t7 g  h 0.006  7.17e10 8e-5  2768 100 1
+t8 a  g 0.006  7.17e10 4e-5  2768 100 1
+t9 b  h   0.006  7.17e10 4e-5  2768 100 1
+t10 b  f  0.006  7.17e10 4e-5  2768 100 1
+t11 c  g  0.006  7.17e10 4e-5  2768 100 1
+t12 d  f  0.006  7.17e10 4e-5  2768 100 1
+t13  c  e  0.006  7.17e10 4e-5  2768 100 1
+t14  b  g   0.006  7.17e10 6e-5  2768 100 1
+t15  c  f  0.006  7.17e10 6e-5  2768 100 1
+
+
+Supports
+#Name  Type  X  Y
+a  pinned  0  22.5 0 0 0 0
+b  joint  0  15 0 0 0 0
+c  joint  0  7.5 0 0 0 0
+d  joint  0  0  0  0  0  0
+e  joint  5  0  0  0  0  0
+f  joint  5  7.5 0 0 0 0
+g  joint  5  15  0  0  0  0
+h  pinned 5  22.5  0  0  0  0
+
+PointLoads
+#SupportName  Fx Fy M
+b  0 0  0
+
+ContLoads
+#BeamName  n q
+t1 0  0
