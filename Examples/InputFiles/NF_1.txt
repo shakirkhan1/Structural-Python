@@ -1,0 +1,16 @@
+Beams
+#Name  Supports1  Supports2  I  E  A  L  numEle
+first  a  b  0.10666e-12  80e9  8e-6  2700     30 0
+
+Supports
+#Name  Type  X  Y   k1   k2   kt  alpha
+a  fixed 0  0 0 0 0 0
+b  endpoint 0.2 0 0 0 0 0
+
+PointLoads
+#SupportName  Fx Fy M
+a  0  0  0
+
+ContLoads
+#BeamName  n q
+first  0  0

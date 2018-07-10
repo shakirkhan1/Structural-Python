@@ -1,0 +1,22 @@
+Beams
+#Name  Supports1  Supports2  I  E  A  ro  numEle  Truss
+first  a  b  0.006  200e6  0.01  8000   30 1
+second b  c   0.006  200e6  0.01  8000   30 1
+third a  c,d  0.006  200e6  0.01  8000   30 0
+forth d  e  0.006  200e6  0.01  8000   30 0
+
+Supports
+#Name  Type  X  Y
+a  pinned  0  0 0 0 0 0
+b  joint 8  4.6188 0 0 0 0
+c  joint  8  0 0 0 0 0
+d  endpoint  8  0  0  0  0  0
+e  roller  12  0  0  0  0  0
+
+PointLoads
+#SupportName  Fx Fy M
+b  150  0  0
+
+ContLoads
+#BeamName  n q
+first  0  0
