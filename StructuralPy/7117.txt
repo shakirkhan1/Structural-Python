@@ -1,8 +1,8 @@
 Beams
-#Name  Supports1  Supports2  I  E  A  L  numEle
+#Name  Supports1  Supports2  I  E  A  ro  numEle  Truss
 first  a  b  0.006  200e6  0.01  8000   30 0
 second b  c   0.006  200e6  0.01  8000   30 0
-third b  e  0.006  200e6  0.01  8000   30 0
+third b d   0.006  200e6  0.01  8000   30 0
 
 Supports
 #Name  Type  X  Y   k1   k2   kt  alpha
@@ -14,8 +14,8 @@ d  pinned  8.5  0.3  0  0  0  0
 
 PointLoads
 #SupportName  Fx Fy M
-e  0  0 0
+d  0  0 0
 
 ContLoads
 #BeamName  n q
-first  0  400
+first  0,0  400,400

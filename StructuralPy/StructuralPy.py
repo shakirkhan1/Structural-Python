@@ -1,7 +1,6 @@
 import MKE as sa
 import Graphics as gr
 import numpy as np
-from multiprocessing import Process, Queue
 from scipy.interpolate import interp1d
 
 
@@ -93,7 +92,6 @@ def load(filename):
         supports_[i] = [supports[i][0], supports[i][1], float(supports[i][2]), np.float(supports[i][3]),
                         np.float(supports[i][4]), np.float(supports[i][5]), np.float(supports[i][6]),
                         np.float(supports[i][7])]
-        print(supports_)
 
     i = np.array([x for x in np.array([beamsindex, supportsindex, pointloadsindex, contloadsindex]) - pointloadsindex])
 
@@ -224,7 +222,7 @@ def oper(supports_=0, beams_=0, pointloads_=0, contloads_=0):
                                  float(beam[4]),
                                  float(beam[5]),
                                  float(beam[6]),
-                                 int(beam[7])))
+                                 int(beam[7]), bool(int(beam[8]))))
     except TypeError:
         pass
     try:
@@ -552,7 +550,6 @@ def draw_process(beams, supports):
                             draw.draw_loading(beam.n_, beam, -1, draw.BLACK, draw_size=size)
 
                     for sup in supports:
-                        print(size_F)
                         if size_F:
                             size = (sup.Fx**2 + sup.Fy**2)/size_F**2
                         else:

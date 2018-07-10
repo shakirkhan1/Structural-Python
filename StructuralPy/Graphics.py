@@ -1,7 +1,6 @@
 import pygame
 import numpy as np
 import pygame.gfxdraw
-from pygame import *
 
 class Drawing():
     """Class for consturcing visual representation of construction."""
@@ -16,8 +15,8 @@ class Drawing():
         pygame.display.flip()
         pygame.event.get()
         self.Scale = 100
-        self.font = pygame.font.SysFont('freesansbold.ttf', 20)
-        #self.font = pygame.font.SysFont("Sans", 10)
+        #self.font = pygame.font.SysFont('freesansbold.ttf', 20)
+        self.font = pygame.font.SysFont("Sans", 15)
 
     def scaling(self, beams):
         """Used for determening size ratios and for scaling of the consturction."""
@@ -251,8 +250,7 @@ class Drawing():
     def draw_loading(self, loading, beam, direction, colour, draw_size=100):
         """Draws loading on the beam"""
 
-
-        if (max(loading) - min(loading)):
+        if (max(np.hstack((loading, 0)) - min(np.hstack((loading, 0))))):
             L = len(loading)
             loading = np.hstack((0, loading))
             loading = np.hstack((loading, 0))
@@ -452,18 +450,12 @@ class Drawing():
 
         X = int(support.X * self.Scale) + 100
         Z = int(support.Z * self.Scale) + 100
-        print(support.Fx)
-        print(support.Fy)
+
         if support.Fx != 0 or support.Fy != 0:
             M = L / np.sqrt(support.Fx ** 2 + support.Fy ** 2)
             X_ = X + int(support.Fx * M)
             Z_ = Z + int(support.Fy * M)
-            print(np.sqrt(support.Fx ** 2 + support.Fy ** 2))
-            print(L)
-            print(X)
-            print(Z)
-            print(X_)
-            print(Z_)
+
 
             X2 = (int((X - int(support.Fy * M) * 1.0)) + 9 * X_) / 10
             Z2 = int((Z + int(support.Fx * M)) * 1.0 + 9 * Z_) / 10

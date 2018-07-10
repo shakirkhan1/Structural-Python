@@ -388,8 +388,13 @@ def form_mainMatrix(beams, supports, dynamic=False):
         for sup_n in sups_inv:
             sups_name = sups_name + " " + sup_n
         New_name = [beams_name, var, '_', sups_name]
+        #######
+       # if Naming[indices[0], 2] == 2:
+       #     K[:]
         for i in indices[1:]:
             K[:, indices[0]] += K[:, i]
+
+        #######
         K = np.delete(K, indices[1:], axis=1)
         for i in indices[1:]:
             K[indices[0]] += K[i]
