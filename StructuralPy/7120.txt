@@ -1,0 +1,19 @@
+Beams
+#Name  Supports1  Supports2  I  E  A  L  numEle
+first  a  b  0.006  200e6  0.01  8000   30 0
+second b  c   0.006  200e6  0.01  8000   30 0
+
+
+Supports
+#Name  Type  X  Y   k1   k2   kt  alpha
+a  pinned  0  0 0 0 0 180
+b  endpoint 5  0 0 0 0 0
+c  roller 10  5 10000000 10000 1 30
+
+PointLoads
+#SupportName  Fx Fy M
+c  0  0  50000
+
+ContLoads
+#BeamName  n q
+first  100,100  2000,100
