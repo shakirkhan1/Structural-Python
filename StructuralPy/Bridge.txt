@@ -1,0 +1,78 @@
+Beams
+#Name  Supports1  Supports2  I  E  A  ro  numEle  Truss
+b1 a  b,c  0.006  200e6  0.01  8000   30 0
+b2 b,c  d,e   0.006  200e6  0.01  8000   30 0
+b3 d,e  f,g   0.006  200e6  0.01  8000   30 0
+b4 f,g  h,i   0.006  200e6  0.01  8000   30 0
+b5 h,i  j,k   0.006  200e6  0.01  8000   30 0
+b6 j,k  l   0.006  200e6  0.01  8000   30 0
+t1 l  m   0.006  200e6  0.01  8000   30 1
+t2 m  n   0.006  200e6  0.01  8000   30 1
+t3  n  o  0.006  200e6  0.01  8000   30 1
+t4 o  p   0.006  200e6  0.01  8000   30 1
+t5 p  r   0.006  200e6  0.01  8000   30 1
+t6 r  a   0.006  200e6  0.01  8000   30 1
+t7 r  c   0.006  200e6  0.01  8000   30 1
+t8 r  e   0.006  200e6  0.01  8000   30 1
+t9 p  e   0.006  200e6  0.01  8000   30 1
+t10 o  e   0.006  200e6  0.01  8000   30 1
+t11  o  g  0.006  200e6  0.01  8000   30 1
+t12 o  i   0.006  200e6  0.01  8000   30 1
+t13 n  i   0.006  200e6  0.01  8000   30 1
+t14 m  i   0.006  200e6  0.01  8000   30 1
+t15 m  k   0.006  200e6  0.01  8000   30 1
+
+
+
+
+Supports
+#Name  Type  X  Z   k1   k2   kt  alpha
+a  pinned  	0  3 0 0 0 0
+b  endpoint 	3  3 0 0 0 0
+c  joint 	3  3 0 0 0 0
+d  endpoint 	6  3 0 0 0 0
+e  joint 	6  3 0 0 0 0
+f  endpoint 	9  3 0 0 0 0
+g  joint 	9  3 0 0 0 0
+h  endpoint	12  3 0 0 0 0
+i  joint 	12 3 0 0 0 0
+j  endpoint 	15  3 0 0 0 0
+k  joint 	15  3 0 0 0 0
+l  pinned 	18  3 0 0 0 0
+m  joint 	15  0.5 0 0 0 0
+n  joint 	12  0 0 0 0 0
+o  joint 	9  0.0 0 0 0 0
+p  joint 	6  0. 0 0 0 0
+r  joint 	3  0.5 0 0 0 0
+
+
+
+
+PointLoads
+#SupportName  Fx Fy M
+g  0  1000 0
+
+ContLoads
+#BeamName  n q
+b1  0,0 1000,1000
+b2  0,0 1000,1000
+b3  0,0 1000,1000
+b4  0,0 1000,1000
+b5  0,0 1000,1000
+b6  0,0 1000,1000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
