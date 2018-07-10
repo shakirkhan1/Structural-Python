@@ -17,4 +17,4 @@ To use User interface:
 
   Graphical representation
   
-For use without user interface see "Structural-python/Examples/"
+For use without user interface see "Structural-python/Examples/JupyterNotebook"
