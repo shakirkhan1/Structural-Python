@@ -17,7 +17,7 @@ f  endpoint  4.5  1.5  0  0  0  0
 
 PointLoads
 #SupportName  Fx Fy M
-e  0  6000  0
+f  0  6000  0
 
 ContLoads
 #BeamName  n q

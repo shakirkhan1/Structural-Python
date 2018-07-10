@@ -8,7 +8,7 @@ Supports
 #Name  Type  X  Z   k1   k2   kt  alpha
 a  pinned  0  0 0 0 0 180
 b  endpoint 5  0 0 0 0 0
-c  roller 10  5 10000000 10000 1 30
+c  roller 10  5 0  0  0 30
 
 PointLoads
 #SupportName  Fx Fy M
