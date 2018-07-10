@@ -35,10 +35,15 @@ Coordinate system
 ------------------------
 The file is based in SVG-like formate. 
 |---------> X
+
 |
+
 |
+
 |
+
 V
+
 Z
 
 
@@ -51,96 +56,148 @@ Beams
 Defines beam or truss element. Example:
 
 Beams
+
 #Name    Supports1    Supports2    I     E     A     rho     numEle    Truss
+
 first     a,b          b,c         1     1     1      1         30       0
 
 Name 
+
   (string)
+  
   defines the identification string of the Beam.
 
 Supports1 
+
   (string or stirngs seperated by ',')
+  
   define the supports present in first node of the beam. Supports are identified by their id string.
 
 Supports2 
+
   (string or stirngs seperated by ',')
+  
   define the supports present in second node of the beam. Supports are identified by their id string.
 
 I
+
   (float)
+  
   defines the second moment of inertia of the beam
 
 E
+
   (float)
+  
   defines the Youngs module of the beam
 
 A
+
   (float)
+  
   defines cross sectional area of the beam
 
 rho
+
   (float)
+  
   defines the density of the beam
 
 numEle
+
   (int)
+  
   defines number of finite elements used in the beam.
 
 Truss
+
   (int)
-  defines if the element is beam or truss.
+  
+  defines if the element is beam or truss
+  .
   if Truss:
+  
     #Truss
+    
   else:
+  
     #Beam
 
 
 Supports
 -----------------
 Defines the support. Example
+
 Supports
+
 #Name    Type    X    Z     k1     k2     kt    alpha
+
 a       pinned   0    0     0      0      0     180
 
 Name 
+
   (string)
+  
   defines the identification string of the Support.
   
 Type
+
   (string)
+  
   defines the type of support and its (NFS).
+  
   Options:
+  
     pinned
+    
     fixed
+    
     roller
+    
     joint
+    
     endpoint
+    
     beam_roller
+    
     slider_on_beam
+    
     joint_slider_on_beam
     
 X
+
   (float)
+  
   defines X coordinate of the support
     
 Z
+  
   (float)
+  
   defines Z coordinate of the support
   
 k1
+  
   (float)
+  
   defines stifness of k1 spring
  
 k2
+  
   (float)
+  
   defines stifness of k2 spring
   
 kt
+  
   (float)
+  
   defines stifness of torsion spring
 
 alpha
+  
   (float, deg)
+  
   deifnes angle of the suport.
 
 Pointloads
