@@ -495,7 +495,12 @@ def natural_frequencies(M, K):
     A = np.matmul(np.linalg.inv(M), K)
     eigenvalues, eigvectors = np.linalg.eig(A)
     NF = np.sqrt(eigenvalues)
-    return NF, eigvectors
+    eig = {}
+    for nf, vec in zip(NF, eigvectors):
+        eig[nf] = vec
+    sortedNf = np.sort(list(eig.keys()))
+
+    return sortedNf, eig
 
 
 

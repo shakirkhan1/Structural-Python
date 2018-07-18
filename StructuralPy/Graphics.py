@@ -219,9 +219,12 @@ class Drawing():
             pygame.draw.line(self.screen, self.BLACK, [X, Z],
                              [X + 10 * support.tran_m[0, 0] + 20 * support.tran_m[0, 1],
                               20 * support.tran_m[1, 1] + 10 * support.tran_m[1, 0] + Z], 2)
+            rect = pygame.Rect(0, 0, 16, 16)
+            rect.center = (X + support.tran_m[0, 1]*16, Z + support.tran_m[0,0]*16)
             pygame.draw.ellipse(self.screen, self.BLACK,
-                                [X - 7* support.tran_m[0, 0] + 8* support.tran_m[0, 1]
-                                 , Z + 8 * support.tran_m[1, 1] + 7*support.tran_m[1, 0], 16, 16], 2)
+                                [rect.left
+                                    , rect.top
+                                    , 16, 16], 2)
             pygame.draw.circle(self.screen, self.BLACK, [X, Z], 4)
             pygame.display.flip()
             pygame.event.get()
@@ -234,9 +237,12 @@ class Drawing():
             pygame.draw.line(self.screen, self.BLACK, [X, Z],
                              [X + 10 * support.tran_m[0, 0] + 20 * support.tran_m[0, 1],
                               20 * support.tran_m[1, 1] + 10 * support.tran_m[1, 0] + Z], 2)
+            rect = pygame.Rect(0, 0, 16, 16)
+            rect.center = (X + support.tran_m[0, 1]*16, Z + support.tran_m[0,0]*16)
             pygame.draw.ellipse(self.screen, self.BLACK,
-                                [X - 7* support.tran_m[0, 0] + 8* support.tran_m[0, 1]
-                                , Z + 8 * support.tran_m[1, 1] - 7*support.tran_m[1, 0], 16, 16], 2)
+                                [rect.left
+                                    , rect.top
+                                    , 16, 16], 2)
             pygame.display.flip()
             pygame.event.get()
 

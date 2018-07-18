@@ -151,6 +151,7 @@ def oper(supports_=0, beams_=0, pointloads_=0, contloads_=0):
             print('{0:10}  {1:10}'.format("MSave", "Save matrices and vectors in file"))
         if x_:
             print('{0:10}  {1:10}'.format("FSave", "Save final values in file"))
+            print('{0:10}  {1:10}'.format("ESave", "Save eigenvalues vectors values in file"))
         print("===============================================")
 
     def list_elements(supports__, beams__, pointloads__, contloads__):
@@ -397,7 +398,6 @@ def oper(supports_=0, beams_=0, pointloads_=0, contloads_=0):
             print("===============================================")
             print()
             NF, eigenvectors = sa.natural_frequencies(M_, M)
-            NF = np.sort(NF)
             print("Natural frequences:")
             for num in range(5):
                 print("f{}: {}".format(num, NF[num]))
@@ -431,6 +431,31 @@ def oper(supports_=0, beams_=0, pointloads_=0, contloads_=0):
                     file.write("%{:<19.2f}  {:<25}  {:<25}  {:<25}  {:<25}  {:<25}  {:<25}\n".format(xs_, u, w, fi, N, T, M))
 
             file.close()
+
+        if x_ and (in_[0] == "E" or in_[0] =="e"):
+            file = open("Eig.txt", "w+")
+            file.write("\n")
+            file.write("===============================================\n")
+            file.write("\n")
+            file.write("Eigen values\n")
+            file.write("\n")
+            keys = NF[:10]
+            args_list = np.array(["Natural Freq [rad/s]"], dtype='U25')
+            args_list = np.hstack((args_list, keys))
+            file.write("{:<20}  {:<25}  {:<25}  {:<25}  {:<25}  {:<25}  "
+                       "{:<25}  {:<25}  {:<25}  {:<25}  {:<25}\n".format(*args_list))
+            file.write("\n")
+
+            for name, v0, v1, v2, v3, v4, v5, v6, v7, v8, v9 in zip(Naming, eigenvectors[keys[0]], eigenvectors[keys[1]],
+                                                                    eigenvectors[keys[2]], eigenvectors[keys[3]],
+                                                                    eigenvectors[keys[4]], eigenvectors[keys[5]],
+                                                                    eigenvectors[keys[6]], eigenvectors[keys[7]],
+                                                                    eigenvectors[keys[8]], eigenvectors[keys[9]]):
+                file.write("{:<20}  {:<25}  {:<25}  {:<25}  {:<25}  {:<25}  "
+                           "{:<25}  {:<25}  {:<25}  {:<25}  {:<25}\n".format(str(name), v0, v1, v2, v3, v4, v5, v6, v7, v8, v9))
+            file.close()
+
+
         if a and (in_[0] == "M" or in_[0] == "m"):
             np.savetxt("StiffnessMatrix.mat", M, delimiter=',')
             np.savetxt("MassMatrix.mat", M_, delimiter=',')
@@ -439,6 +464,7 @@ def oper(supports_=0, beams_=0, pointloads_=0, contloads_=0):
 
         if in_[0] == "g" or in_[0] == "G":
             draw_process(beams, supports)
+
 
         else:
             info()
@@ -475,7 +501,8 @@ def draw_process(beams, supports):
 
     for beam in beams:
         u_ = np.hstack((u_, beam.u))
-        w_ = np.hstack((w_, beam.w))
+        if not beam.Truss:
+            w_ = np.hstack((w_, beam.w))
         q_ = np.hstack((q_, np.array(beam.q_).flatten()))
         n_ = np.hstack((n_, np.array(beam.n_).flatten()))
         try:
@@ -562,8 +589,9 @@ def draw_process(beams, supports):
                         draw.draw_loading(beam.u, beam, 1, draw.BLUE, draw_size = size)
                 if w:
                     for beam in beams:
-                        size = (max(np.hstack((beam.w, 0))) - min(np.hstack((beam.w, 0))))/size_w * 100
-                        draw.draw_loading(beam.w, beam, -1, draw.GREEN, draw_size = size)
+                        if not beam.Truss:
+                            size = (max(np.hstack((beam.w, 0))) - min(np.hstack((beam.w, 0))))/size_w * 100
+                            draw.draw_loading(beam.w, beam, -1, draw.GREEN, draw_size = size)
                 if N:
                     for beam in beams:
                         size = (max(np.hstack((beam.N, 0))) - min(np.hstack((beam.N, 0))))/size_N * 100
