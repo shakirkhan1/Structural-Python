@@ -38,9 +38,18 @@ class Support(object):
 
         #Defining transformation matrix of the support
         ##All supports in the same node must have the same orientation!!!
-        alpha = alpha/180*np.pi
+        alpha = float(alpha)/180*np.pi
         self.tran_m = np.array([[np.cos(alpha), np.sin(alpha)],
                        [-np.sin(alpha), np.cos(alpha)]])
+    def __repr__(self):
+        return "Item(%s)" % (self.id)
+    def __eq__(self, other):
+        if isinstance(other, Item):
+            return (self.id == other.id)
+        else:
+            return False
+    def __hash__(self):
+        return hash(self.__repr__())
 
     def set_NFS(self):
         """
@@ -124,19 +133,37 @@ class Beam(object):
         self.Truss = Truss
 
         #We define couple placeholding variables
-        self.u = 0
-        self.w = 0
+        self.u = (0,)
+        self.w = (0,)
         self.n, self.n_ = [0, 0], [0, 0]
         self.q, self.q_ = [0, 0], [0, 0]
+        self.N = (0,)
+        self.T = (0,)
+        self.M = (0,)
+        self.force_N = np.zeros(self.num_ele)
+        self.force_T = np.zeros(self.num_ele)
+        self.force_M = np.zeros(self.num_ele)
+
 
         #Length is calculated by considering support positions
         self.L = np.sqrt((supports_1[0].X - supports_2[0].X)**2 + (supports_1[0].Z - supports_2[0].Z)**2)
 
         #Lengh of individual finite element is calculated by considering beam lenght and number of elements
-        self.h = self.L / (self.num_ele)
+        self.h = float(self.L) / (float(self.num_ele))
 
         #Defining number of variables. (3 variables per node)
         self.Num_var = self.num_ele*3 + 3
+
+    def transformation_matrix_to_global(self):
+        """Forms and returns transformation matrix for transformation between local and global coordinates"""
+
+        #Defining transformation matrix for end nodes
+        self.tran_m_beam_global = np.identity(3)
+        self.tran_m_beam_global[0:2, 0:2] = np.transpose(self.tran_m_beam)
+
+        # Defining main transformation matrix for transformation from local to global
+        self.tran_m_local_to_global = block_diag(*[self.tran_m_beam_global for i in range(self.num_ele + 1)])
+
 
     def transformation_matrix(self):
         """Forms and returns transformation matrix of whole beam."""
@@ -207,7 +234,6 @@ class Beam(object):
 
     def set_loading(self, n, q):
         """Sets continuous loading along the beam."""
-
         self.n = n
         self.q = q
 
@@ -215,11 +241,13 @@ class Beam(object):
         if callable(n):
             x = np.linspace(0, self.L, self.num_ele)
             self.n_ = n(x)
-        else:
-            self.n_ = n
+        elif not np.shape(n):
+            self.n_ = [n, n]
         if callable(q):
             x = np.linspace(0, self.L, self.num_ele)
             self.q_ = q(x)
+        if not np.shape(n):
+            self.q_ = [q, q]
         else:
             self.q_ = q
 
@@ -332,6 +360,17 @@ class Beam(object):
 
         return b
 
+    def calculate_global_deflections(self, R):
+        """Calculates deflection of beam in global coordinate system."""
+
+        #Transforming back to beam coordinate system
+        R1 = np.matmul(self.tran_m_local_to_global, np.matmul(self.tran_m, R))
+
+        #Spliting according to variables
+        R_ = np.reshape(R1, (self.num_ele + 1, 3))
+        self.u_global = R_[:, 0]
+        self.w_global = R_[:, 1]
+        self.fi_global = R_[:, 2]
 
     def calculate_forces(self, R):
         """Calculates shear force, tension force and bending moment along the beam for each node."""
@@ -355,13 +394,13 @@ class Beam(object):
         for n, r in zip(self.b_, R):
             r = r.flatten()
             self.NTM.append(np.matmul(self.K_, r) - n)
-        self.N = [-self.NTM[0][0]]
-        self.T = [-self.NTM[0][1]]
-        self.M = [-self.NTM[0][2]]
+        self.force_N = [-self.NTM[0][0]]
+        self.force_T = [-self.NTM[0][1]]
+        self.force_M = [-self.NTM[0][2]]
         for NTM in self.NTM:
-            self.N.append(NTM[-3])
-            self.T.append(NTM[-2])
-            self.M.append(NTM[-1])
+            self.force_N.append(NTM[-3])
+            self.force_T.append(NTM[-2])
+            self.force_M.append(NTM[-1])
 
 def form_mainMatrix(beams, supports, dynamic=False):
     """Equation assembler."""
@@ -388,13 +427,8 @@ def form_mainMatrix(beams, supports, dynamic=False):
         for sup_n in sups_inv:
             sups_name = sups_name + " " + sup_n
         New_name = [beams_name, var, '_', sups_name]
-        #######
-       # if Naming[indices[0], 2] == 2:
-       #     K[:]
         for i in indices[1:]:
             K[:, indices[0]] += K[:, i]
-
-        #######
         K = np.delete(K, indices[1:], axis=1)
         for i in indices[1:]:
             K[indices[0]] += K[i]
@@ -431,7 +465,6 @@ def form_mainMatrix(beams, supports, dynamic=False):
             M = np.delete(M, indices_main_boundries, axis=1)
         return Naming, K, M, b1
 
-
     for Sup in supports:
         if Sup.NFD[3] == 1:
             Naming, K, M, b1 = assembler_1(Sup, Naming, K, M, b1, "u")
@@ -461,11 +494,11 @@ def form_mainMatrix(beams, supports, dynamic=False):
         indices = np.array([num for num, i in enumerate(Naming) if Sup.id in i[3]])
         for i_ in indices:
             if Naming[i_, 1] == 'u':
-                b1[i_] = Sup.Fx
+                b1[i_] += Sup.Fx
             if Naming[i_, 1] == 'w':
-                b1[i_] = Sup.Fy
+                b1[i_] += Sup.Fy
             if Naming[i_, 1] == 'fi':
-                b1[i_] = Sup.M
+                b1[i_] += Sup.M
     return K, b1, Naming, M
 
 
@@ -495,22 +528,4 @@ def natural_frequencies(M, K):
     A = np.matmul(np.linalg.inv(M), K)
     eigenvalues, eigvectors = np.linalg.eig(A)
     NF = np.sqrt(eigenvalues)
-    eig = {}
-    for nf, vec in zip(NF, eigvectors):
-        eig[nf] = vec
-    sortedNf = np.sort(list(eig.keys()))
-
-    return sortedNf, eig
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return NF, eigvectors
